@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ if not .IsHome }}{{ .Title }} — {{ end }}{{ site.Title }}</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      background-color: #080808;
+      color: #dfdfdf;
+      font-family: 'Inter', sans-serif;
+    }
+    h1, h2, h3, .font-serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-white selection:text-black">
+
+  <header class="border-b border-neutral-800 bg-[#080808]/90 sticky top-0 z-40 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row md:items-baseline md:justify-between gap-4">
+      <a href="/" class="group">
+        <span class="text-xl tracking-[0.2em] font-medium uppercase text-white group-hover:text-neutral-400 transition-colors">
+          Dwianto Wibowo
+        </span>
+        <span class="block text-[10px] tracking-[0.25em] text-neutral-400 uppercase mt-0.5">Independent Visual Storyteller </span>
+      </a>
+
+      <nav class="flex items-center gap-7 text-xs tracking-[0.2em] uppercase font-light">
+        <a href="/projects/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">Projects</a>
+        <a href="/commissioned/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">Commissioned</a>
+        <a href="/about/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">About</a>
+        <a href="/contact/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-12">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer class="border-t border-neutral-800 py-8 bg-[#080808]">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-400">
+      <p>© {{ now.Format "2006" }} Dwianto Wibowo. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="mailto:contact@dwiantowibowo.com" class="hover:text-white">contact@dwiantowibowo.com</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

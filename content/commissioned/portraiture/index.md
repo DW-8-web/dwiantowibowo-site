@@ -1,0 +1,40 @@
+---
+title: "Portraiture"
+year: "2009-2026"
+location: "Indonesia"
+client: "Editorial"
+summary: "Series of Portraiture Photography Assignments"
+photos:
+    - src: "jaya-suprana.jpg"
+      caption: "Jaya Suprana, Indonesian pianist, composer, and entrepreneur - Tempo Magazine, 2010"
+    - src: "hanung-bramantyo.jpg"
+      caption: "Hanung Bramantyo, Indonesian film director - Tempo Magazine, 2010"
+    - src: "mesty-aryotejo.jpg"
+      caption: "Mesty Ariotedjo, Pediatrician and Parenting Expert - Tempo Magazine, 2011"
+    - src: "titiek-puspa.jpg"
+      caption: Titiek Puspa, Indonesian Legendary Artist - Tempo Magazine, 2010"
+    - src: "eka-kurniawan.jpg"
+      caption: "Eka Kurniawan, Author - The New York Times, 2015"
+    - src: "heidar-bagir.jpg"
+      caption: "Heidar Bagir, Philanthropist - Koran Tempo Daily, 2009"
+    - src: "jamal-hamadi.jpg"
+      caption: "Jamal Hamadi, Hairstylist - Koran Tempo Daily, 2009"
+    - src: "yurike-busira.jpg"
+      caption: "Yurike Busira, Boxing Athlete - Koran Tempo Daily, 2009"
+    - src: "rangga-riantiarno.jpg"
+      caption: "Rangga Riantiarno, Actor - Tempo Magazine, 2013"
+    - src: "atika-hasiholan.jpg"
+      caption: "Atiqah Hasiholan, Actress - Koran Tempo Daily, 2009"
+    - src: "william-wongso.jpg"
+      caption: "William Wongso, Culinary Expert - Tempo Magazine, 2013"
+    - src: "friska-ria.jpg"
+      caption: "Friska Ria Wibowo, Sanshou Athlete - Koran Tempo Daily, 2009"
+    - src: "sudomo.jpg"
+      caption: "Sudomo, Suharto's Watchdog - Tempo Magazine, 2011"
+    - src: "sawung-jabo.jpg"
+      caption: "Sawung Jabo, Indonesia Legendary Musician - Tempo Magazine, 2011"
+
+---
+
+Series of portraiture photography assignments featuring prominent Indonesian figures.
+

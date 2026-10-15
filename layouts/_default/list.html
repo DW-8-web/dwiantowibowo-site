@@ -1,0 +1,28 @@
+{{ define "main" }}
+<div class="border-b border-neutral-800 pb-4 mb-10 flex justify-between items-baseline">
+  <h1 class="text-2xl font-serif text-white tracking-wide uppercase">{{ .Title }}</h1>
+  <span class="text-xs font-mono text-neutral-400 uppercase tracking-widest">{{ len .RegularPages }} Stories</span>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  {{ range .RegularPages }}
+  <article class="group">
+    <a href="{{ .RelPermalink }}" class="block">
+      <div class="aspect-[3/2] bg-neutral-900 border border-neutral-800 overflow-hidden mb-3 relative">
+        {{ with .Resources.GetMatch "cover.*" }}
+          <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        {{ else with index (.Resources.ByType "image") 0 }}
+          <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        {{ else }}
+          <div class="w-full h-full flex items-center justify-center text-xs text-neutral-600 font-mono">NO COVER IMAGE</div>
+        {{ end }}
+      </div>
+      <h2 class="text-lg font-serif text-white group-hover:underline">{{ .Title }}</h2>
+      {{ with .Params.summary }}
+        <p class="text-xs text-neutral-400 mt-1 line-clamp-2 font-light leading-relaxed">{{ . }}</p>
+      {{ end }}
+    </a>
+  </article>
+  {{ end }}
+</div>
+{{ end }}

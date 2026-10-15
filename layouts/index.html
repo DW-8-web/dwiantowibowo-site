@@ -1,0 +1,61 @@
+{{ define "main" }}
+<!-- HERO SPLASH SECTION (Karya Sorotan Terbaru) -->
+{{ $featured := index (where site.RegularPages "Section" "in" (slice "projects" "commissioned")) 0 }}
+{{ if $featured }}
+<section class="mb-20">
+  <div class="relative w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-900 border border-neutral-800 overflow-hidden group">
+    {{ with $featured.Resources.GetMatch "cover.*" }}
+      <img src="{{ .RelPermalink }}" alt="{{ $featured.Title }}" class="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
+    {{ else with index ($featured.Resources.ByType "image") 0 }}
+      <img src="{{ .RelPermalink }}" alt="{{ $featured.Title }}" class="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
+    {{ end }}
+    
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-10">
+      <span class="text-[10px] font-mono tracking-[0.25em] text-neutral-400 uppercase mb-2">Featured Series · {{ $featured.Params.year | default "Archive" }}</span>
+      <h2 class="text-2xl md:text-4xl font-serif text-white mb-2">{{ $featured.Title }}</h2>
+      {{ with $featured.Params.summary }}
+        <p class="text-xs md:text-sm text-neutral-300 max-w-2xl font-light line-clamp-2 mb-4">{{ . }}</p>
+      {{ end }}
+      <div>
+        <a href="{{ $featured.RelPermalink }}" class="inline-flex items-center gap-2 text-xs tracking-widest font-mono uppercase bg-white text-black px-4 py-2 hover:bg-neutral-300 transition-colors">
+          View Story &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<!-- RECENT WORKS (Gabungan Projects & Commissioned) -->
+<section>
+  <div class="border-b border-neutral-800 pb-4 mb-8 flex items-baseline justify-between">
+    <h2 class="text-xl font-serif text-white tracking-wide uppercase">Recent Works</h2>
+    <span class="text-xs font-mono text-neutral-500 uppercase tracking-widest">Projects &amp; Assignments</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {{ range where site.RegularPages "Section" "in" (slice "projects" "commissioned") }}
+    <article class="group">
+      <a href="{{ .RelPermalink }}" class="block">
+        <div class="aspect-[3/2] bg-neutral-900 border border-neutral-800 overflow-hidden mb-3 relative">
+          {{ with .Resources.GetMatch "cover.*" }}
+            <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          {{ else with index (.Resources.ByType "image") 0 }}
+            <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          {{ else }}
+            <div class="w-full h-full flex items-center justify-center text-xs text-neutral-600 font-mono">NO IMAGE</div>
+          {{ end }}
+          <span class="absolute top-2 left-2 text-[9px] font-mono tracking-widest uppercase bg-black/80 text-neutral-300 px-2 py-0.5 border border-neutral-800">
+            {{ .Section }}
+          </span>
+        </div>
+        <h3 class="text-base font-serif text-white group-hover:underline">{{ .Title }}</h3>
+        {{ with .Params.summary }}
+          <p class="text-xs text-neutral-400 mt-1 line-clamp-2 font-light leading-relaxed">{{ . }}</p>
+        {{ end }}
+      </a>
+    </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

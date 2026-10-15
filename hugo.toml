@@ -1,0 +1,29 @@
+baseURL = 'https://localhost:1313/'
+languageCode = 'en-us'
+title = 'Dwianto Wibowo · Independent Visual Storyteller'
+
+# Menentukan menu navigasi utama
+[menu]
+  [[menu.main]]
+    identifier = 'projects'
+    name = 'Projects'
+    url = '/projects/'
+    weight = 1
+
+  [[menu.main]]
+    identifier = 'commissioned'
+    name = 'Commissioned'
+    url = '/commissioned/'
+    weight = 2
+
+  [[menu.main]]
+    identifier = 'about'
+    name = 'About'
+    url = '/about/'
+    weight = 3
+
+  [[menu.main]]
+    identifier = 'contact'
+    name = 'Contact'
+    url = '/contact/'
+    weight = 4
