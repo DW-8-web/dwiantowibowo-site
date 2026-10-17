@@ -1,9 +1,6 @@
 {{ define "main" }}
 <div class="border-b border-neutral-800 pb-6 mb-10">
-  <div class="flex justify-between items-baseline mb-2">
-    <h1 class="text-2xl md:text-3xl font-medium text-white tracking-[0.1em] uppercase">{{ .Title }}</h1>
-    <span class="text-xs font-mono text-neutral-400 uppercase tracking-widest">{{ len .RegularPages }} Stories</span>
-  </div>
+  <h1 class="text-2xl md:text-3xl font-medium text-white tracking-[0.1em] uppercase mb-2">{{ .Title }}</h1>
   {{ with .Description }}
     <p class="text-xs md:text-sm text-neutral-400 font-light max-w-2xl leading-relaxed">{{ . }}</p>
   {{ end }}
