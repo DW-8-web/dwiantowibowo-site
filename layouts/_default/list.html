@@ -33,13 +33,7 @@
           <div class="w-full h-full flex items-center justify-center text-xs text-neutral-600 font-mono">NO COVER IMAGE</div>
         {{ end }}
 
-        <div class="absolute top-2.5 right-2.5 flex items-center gap-1.5 pointer-events-none">
-          {{ with .Params.photos }}
-            <span class="text-[9px] font-mono tracking-widest uppercase bg-black/80 backdrop-blur-sm text-neutral-300 px-2 py-0.5 border border-neutral-800">
-              {{ len . }} Frames
-            </span>
-          {{ end }}
-        </div>
+
 
         {{ with .Params.year }}
           <span class="absolute bottom-2.5 left-2.5 text-[9px] font-mono tracking-widest uppercase bg-black/80 backdrop-blur-sm text-neutral-300 px-2 py-0.5 border border-neutral-800">
