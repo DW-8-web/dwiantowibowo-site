@@ -1,18 +1,31 @@
 {{ define "main" }}
 <!-- HERO SPLASH SECTION (Karya Sorotan Terbaru) -->
-{{ $featured := index (where site.RegularPages "Section" "in" (slice "projects" "commissioned")) 0 }}
+{{ $featured := index (where site.RegularPages "Params.featured" true) 0 }}
+{{ if not $featured }}
+  {{ $featured = index (where site.RegularPages.ByDate.Reverse "Section" "in" (slice "projects" "commissioned")) 0 }}
+{{ end }}
 {{ if $featured }}
 <section class="mb-20">
   <div class="relative w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-900 border border-neutral-800 overflow-hidden group">
-    {{ with $featured.Resources.GetMatch "cover.*" }}
-      <img src="{{ .RelPermalink }}" alt="{{ $featured.Title }}" class="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-    {{ else with index ($featured.Resources.ByType "image") 0 }}
+    {{ $featCover := "" }}
+    {{ with $featured.Params.cover }}
+      {{ $featCover = $featured.Resources.GetMatch . }}
+    {{ end }}
+    {{ if not $featCover }}
+      {{ $featCover = $featured.Resources.GetMatch "cover.*" }}
+    {{ end }}
+    {{ if not $featCover }}
+      {{ with index ($featured.Resources.ByType "image") 0 }}
+        {{ $featCover = . }}
+      {{ end }}
+    {{ end }}
+    {{ with $featCover }}
       <img src="{{ .RelPermalink }}" alt="{{ $featured.Title }}" class="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
     {{ end }}
     
     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-10">
       <span class="text-[10px] font-mono tracking-[0.25em] text-neutral-400 uppercase mb-2">Featured Series · {{ $featured.Params.year | default "Archive" }}</span>
-      <h2 class="text-2xl md:text-4xl font-serif text-white mb-2">{{ $featured.Title }}</h2>
+      <h2 class="text-2xl md:text-4xl font-medium tracking-tight text-white mb-2">{{ $featured.Title }}</h2>
       {{ with $featured.Params.summary }}
         <p class="text-xs md:text-sm text-neutral-300 max-w-2xl font-light line-clamp-2 mb-4">{{ . }}</p>
       {{ end }}
@@ -29,30 +42,56 @@
 <!-- RECENT WORKS (Gabungan Projects & Commissioned) -->
 <section>
   <div class="border-b border-neutral-800 pb-4 mb-8 flex items-baseline justify-between">
-    <h2 class="text-xl font-serif text-white tracking-wide uppercase">Recent Works</h2>
+    <h2 class="text-xl font-medium text-white tracking-[0.1em] uppercase">Recent Works</h2>
     <span class="text-xs font-mono text-neutral-500 uppercase tracking-widest">Projects &amp; Assignments</span>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {{ range where site.RegularPages "Section" "in" (slice "projects" "commissioned") }}
+    {{ range where site.RegularPages.ByDate.Reverse "Section" "in" (slice "projects" "commissioned") }}
+    {{ $page := . }}
     <article class="group">
-      <a href="{{ .RelPermalink }}" class="block">
+      <a href="{{ $page.RelPermalink }}" class="block">
         <div class="aspect-[3/2] bg-neutral-900 border border-neutral-800 overflow-hidden mb-3 relative">
-          {{ with .Resources.GetMatch "cover.*" }}
-            <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-          {{ else with index (.Resources.ByType "image") 0 }}
-            <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          {{ $cover := "" }}
+          {{ with $page.Params.cover }}
+            {{ $cover = $page.Resources.GetMatch . }}
+            {{ if not $cover }}
+              {{ $cover = $page.Resources.GetMatch (printf "*%s*" .) }}
+            {{ end }}
+          {{ end }}
+          {{ if not $cover }}
+            {{ $cover = $page.Resources.GetMatch "cover.*" }}
+          {{ end }}
+          {{ if not $cover }}
+            {{ with index ($page.Resources.ByType "image") 0 }}
+              {{ $cover = . }}
+            {{ end }}
+          {{ end }}
+          {{ with $cover }}
+            <img src="{{ .RelPermalink }}" alt="{{ $page.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
           {{ else }}
             <div class="w-full h-full flex items-center justify-center text-xs text-neutral-600 font-mono">NO IMAGE</div>
           {{ end }}
-          <span class="absolute top-2 left-2 text-[9px] font-mono tracking-widest uppercase bg-black/80 text-neutral-300 px-2 py-0.5 border border-neutral-800">
+          <span class="absolute top-2 left-2 text-[9px] font-mono tracking-widest uppercase bg-black/80 backdrop-blur-sm text-neutral-300 px-2 py-0.5 border border-neutral-800">
             {{ .Section }}
           </span>
+          {{ with .Params.photos }}
+            <span class="absolute top-2 right-2 text-[9px] font-mono tracking-widest uppercase bg-black/80 backdrop-blur-sm text-neutral-300 px-2 py-0.5 border border-neutral-800">
+              {{ len . }} Frames
+            </span>
+          {{ end }}
         </div>
-        <h3 class="text-base font-serif text-white group-hover:underline">{{ .Title }}</h3>
-        {{ with .Params.summary }}
-          <p class="text-xs text-neutral-400 mt-1 line-clamp-2 font-light leading-relaxed">{{ . }}</p>
-        {{ end }}
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
+            {{ with .Params.year }}<span>{{ . }}</span>{{ end }}
+            {{ if and .Params.year .Params.location }}<span>·</span>{{ end }}
+            {{ with .Params.location }}<span>{{ . }}</span>{{ end }}
+          </div>
+          <h3 class="text-base font-medium text-white group-hover:underline tracking-tight">{{ .Title }}</h3>
+          {{ with .Params.summary }}
+            <p class="text-xs text-neutral-400 mt-1 line-clamp-2 font-light leading-relaxed">{{ . }}</p>
+          {{ end }}
+        </div>
       </a>
     </article>
     {{ end }}

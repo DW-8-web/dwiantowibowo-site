@@ -5,44 +5,127 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ if not .IsHome }}{{ .Title }} — {{ end }}{{ site.Title }}</title>
   
+  {{ $description := .Params.summary | default .Description | default "Independent Visual Storyteller focusing on long-form documentary photography, human rights, and social realities across the Indonesian archipelago." }}
+  <meta name="description" content="{{ $description }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:site_name" content="{{ site.Title }}">
+  <meta property="og:title" content="{{ if not .IsHome }}{{ .Title }} — {{ end }}{{ site.Title }}">
+  <meta property="og:description" content="{{ $description }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  {{ $metaImg := "" }}
+  {{ with .Params.cover }}
+    {{ $metaImg = $.Resources.GetMatch . }}
+  {{ end }}
+  {{ if not $metaImg }}
+    {{ $metaImg = .Resources.GetMatch "cover.*" }}
+  {{ end }}
+  {{ if not $metaImg }}
+    {{ with index (.Resources.ByType "image") 0 }}
+      {{ $metaImg = . }}
+    {{ end }}
+  {{ end }}
+  {{ with $metaImg }}
+  <meta property="og:image" content="{{ .Permalink }}">
+  <meta name="twitter:image" content="{{ .Permalink }}">
+  {{ end }}
+
+  <!-- Minimalist Camera SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23080808'/><circle cx='50' cy='50' r='32' fill='none' stroke='%23ffffff' stroke-width='6'/><circle cx='50' cy='50' r='18' fill='none' stroke='%23888888' stroke-width='4'/><circle cx='50' cy='50' r='7' fill='%23ffffff'/></svg>">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   
   <style>
     body {
       background-color: #080808;
       color: #dfdfdf;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    h1, h2, h3, .font-serif {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+
+    /* Headings & Brand: Inter Sans-Serif with sharp editorial tracking */
+    h1, h2, h3, h4, h5, h6, .page-title, .post-title, .title, .font-serif, .site-brand {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    /* Editorial styling for markdown content (About, Contact, Essay texts) */
+    .prose-content h2, .prose-content h3 {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #ffffff;
+      margin-top: 2.25rem;
+      margin-bottom: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: inherit;
+      border-bottom: 1px solid #262626;
+      padding-bottom: 0.5rem;
+    }
+    .prose-content ul {
+      list-style-type: none;
+      margin: 0.75rem 0 1.5rem 0;
+      padding: 0;
+    }
+    .prose-content li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.65rem;
+      line-height: 1.6;
+      color: #b5b5b5;
+    }
+    .prose-content li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: #525252;
+    }
+    .prose-content li strong {
+      color: #ffffff;
+      font-weight: 500;
+    }
+    .prose-content a {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+    .prose-content a:hover {
+      color: #a3a3a3;
     }
   </style>
-  <style>
-  /* Memaksa semua judul mengikuti font utama/header website */
-  h1, h2, h3, h4, h5, h6, .page-title, .post-title, .title {
-    font-family: inherit !important;
-  }
-</style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-white selection:text-black">
 
   <header class="border-b border-neutral-800 bg-[#080808]/90 sticky top-0 z-40 backdrop-blur">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row md:items-baseline md:justify-between gap-4">
-      <a href="/" class="group">
-        <span class="text-xl tracking-[0.2em] font-medium uppercase text-white group-hover:text-neutral-400 transition-colors">
-          Dwianto Wibowo
-        </span>
-        <span class="block text-[10px] tracking-[0.25em] text-neutral-400 uppercase mt-0.5">Independent Visual Storyteller </span>
-      </a>
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <a href="/" class="group">
+          <span class="site-brand text-xl tracking-[0.2em] font-medium uppercase text-white group-hover:text-neutral-400 transition-colors">
+            Dwianto Wibowo
+          </span>
+          <span class="block text-[10px] tracking-[0.25em] text-neutral-400 uppercase mt-0.5">Independent Visual Storyteller</span>
+        </a>
 
-      <nav class="flex items-center gap-7 text-xs tracking-[0.2em] uppercase font-light">
-        <a href="/projects/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">Projects</a>
-        <a href="/commissioned/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">Commissioned</a>
-        <a href="/about/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">About</a>
-        <a href="/contact/" class="text-neutral-400 hover:text-white pb-0.5 transition-colors">Contact</a>
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobile-menu-btn" onclick="document.getElementById('site-nav').classList.toggle('hidden'); document.getElementById('site-nav').classList.toggle('flex');" class="md:hidden text-xs tracking-widest font-mono uppercase text-neutral-400 hover:text-white border border-neutral-800 px-3 py-1.5 focus:outline-none">
+          Menu
+        </button>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav id="site-nav" class="hidden md:flex flex-col md:flex-row items-start md:items-center gap-5 md:gap-7 text-xs tracking-[0.2em] uppercase font-light pt-2 md:pt-0">
+        {{ $current := . }}
+        {{ range site.Menus.main }}
+          {{ $isActive := or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) (eq $current.Section .Identifier) (eq $current.RelPermalink .URL) }}
+          <a href="{{ .URL }}" class="{{ if $isActive }}text-white font-medium border-b border-white pb-0.5{{ else }}text-neutral-400 hover:text-white pb-0.5 transition-colors{{ end }}">
+            {{ .Name }}
+          </a>
+        {{ end }}
       </nav>
     </div>
   </header>

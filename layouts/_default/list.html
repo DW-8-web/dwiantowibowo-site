@@ -1,26 +1,67 @@
 {{ define "main" }}
-<div class="border-b border-neutral-800 pb-4 mb-10 flex justify-between items-baseline">
-  <h1 class="text-2xl font-serif text-white tracking-wide uppercase">{{ .Title }}</h1>
-  <span class="text-xs font-mono text-neutral-400 uppercase tracking-widest">{{ len .RegularPages }} Stories</span>
+<div class="border-b border-neutral-800 pb-6 mb-10">
+  <div class="flex justify-between items-baseline mb-2">
+    <h1 class="text-2xl md:text-3xl font-medium text-white tracking-[0.1em] uppercase">{{ .Title }}</h1>
+    <span class="text-xs font-mono text-neutral-400 uppercase tracking-widest">{{ len .RegularPages }} Stories</span>
+  </div>
+  {{ with .Description }}
+    <p class="text-xs md:text-sm text-neutral-400 font-light max-w-2xl leading-relaxed">{{ . }}</p>
+  {{ end }}
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-  {{ range .RegularPages }}
+  {{ range .RegularPages.ByDate.Reverse }}
+  {{ $page := . }}
   <article class="group">
-    <a href="{{ .RelPermalink }}" class="block">
-      <div class="aspect-[3/2] bg-neutral-900 border border-neutral-800 overflow-hidden mb-3 relative">
-        {{ with .Resources.GetMatch "cover.*" }}
-          <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-        {{ else with index (.Resources.ByType "image") 0 }}
-          <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+    <a href="{{ $page.RelPermalink }}" class="block">
+      <div class="aspect-[3/2] bg-neutral-900 border border-neutral-800 overflow-hidden mb-3.5 relative">
+        {{ $cover := "" }}
+        {{ with $page.Params.cover }}
+          {{ $cover = $page.Resources.GetMatch . }}
+          {{ if not $cover }}
+            {{ $cover = $page.Resources.GetMatch (printf "*%s*" .) }}
+          {{ end }}
+        {{ end }}
+        {{ if not $cover }}
+          {{ $cover = $page.Resources.GetMatch "cover.*" }}
+        {{ end }}
+        {{ if not $cover }}
+          {{ with index ($page.Resources.ByType "image") 0 }}
+            {{ $cover = . }}
+          {{ end }}
+        {{ end }}
+        {{ with $cover }}
+          <img src="{{ .RelPermalink }}" alt="{{ $page.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
         {{ else }}
           <div class="w-full h-full flex items-center justify-center text-xs text-neutral-600 font-mono">NO COVER IMAGE</div>
         {{ end }}
+
+        <div class="absolute top-2.5 right-2.5 flex items-center gap-1.5 pointer-events-none">
+          {{ with .Params.photos }}
+            <span class="text-[9px] font-mono tracking-widest uppercase bg-black/80 backdrop-blur-sm text-neutral-300 px-2 py-0.5 border border-neutral-800">
+              {{ len . }} Frames
+            </span>
+          {{ end }}
+        </div>
+
+        {{ with .Params.year }}
+          <span class="absolute bottom-2.5 left-2.5 text-[9px] font-mono tracking-widest uppercase bg-black/80 backdrop-blur-sm text-neutral-300 px-2 py-0.5 border border-neutral-800">
+            {{ . }}
+          </span>
+        {{ end }}
       </div>
-      <h2 class="text-lg font-serif text-white group-hover:underline">{{ .Title }}</h2>
-      {{ with .Params.summary }}
-        <p class="text-xs text-neutral-400 mt-1 line-clamp-2 font-light leading-relaxed">{{ . }}</p>
-      {{ end }}
+
+      <div class="space-y-1">
+        <div class="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
+          {{ with .Params.client }}<span>{{ . }}</span>{{ end }}
+          {{ if and .Params.client .Params.location }}<span>·</span>{{ end }}
+          {{ with .Params.location }}<span>{{ . }}</span>{{ end }}
+        </div>
+        <h2 class="text-base md:text-lg font-medium text-white group-hover:underline leading-snug tracking-tight">{{ .Title }}</h2>
+        {{ with .Params.summary }}
+          <p class="text-xs text-neutral-400 font-light line-clamp-2 leading-relaxed pt-0.5">{{ . }}</p>
+        {{ end }}
+      </div>
     </a>
   </article>
   {{ end }}

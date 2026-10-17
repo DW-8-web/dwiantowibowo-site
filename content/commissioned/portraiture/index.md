@@ -1,9 +1,11 @@
 ---
 title: "Portraiture"
+date: 2026-01-01
 year: "2009-2026"
 location: "Indonesia"
 client: "Editorial"
-summary: "Series of Portraiture Photography Assignments"
+cover: "titiek-puspa.webp"
+summary: "Editorial environmental portraits of prominent Indonesian cultural figures, authors, artists, and public figures, commissioned by The New York Times and Tempo."
 photos:
     - src: "jaya-suprana.webp"
       caption: "Jaya Suprana, Indonesian pianist, composer, and entrepreneur - Tempo Magazine, 2010"
@@ -12,7 +14,7 @@ photos:
     - src: "mesty-aryotejo.webp"
       caption: "Mesty Ariotedjo, Pediatrician and Parenting Expert - Tempo Magazine, 2011"
     - src: "titiek-puspa.webp"
-      caption: Titiek Puspa, Indonesian Legendary Artist - Tempo Magazine, 2010"
+      caption: "Titiek Puspa, Indonesian Legendary Artist - Tempo Magazine, 2010"
     - src: "eka-kurniawan.webp"
       caption: "Eka Kurniawan, Author - The New York Times, 2015"
     - src: "heidar-bagir.webp"
@@ -36,5 +38,5 @@ photos:
 
 ---
 
-Series of portraiture photography assignments featuring prominent Indonesian figures.
+A curated collection of editorial environmental portraits commissioned by publications including *The New York Times*, *Majalah Tempo*, and *Koran Tempo* between 2009 and 2026. Rather than staged studio sittings, each photograph approaches prominent Indonesian cultural icons, authors, filmmakers, athletes, and public figures within their authentic spaces and working environments—seeking moments of stillness, character, and quiet vulnerability that reveal the human narrative behind public recognition.
 

@@ -1,5 +1,6 @@
 ---
 title: "Knasaimos, The Papuan Forest Defender"
+date: 2023-08-01
 year: "2023"
 location: "South Sorong, Southwest Papua"
 client: "Project Multatuli"

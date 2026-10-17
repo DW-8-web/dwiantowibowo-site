@@ -1,5 +1,6 @@
 ---
 title: "KBN Cakung; The Twilight of the Bonded Zone in Jakarta"
+date: 2023-09-01
 year: "2023"
 location: "Jakarta"
 client: "Project Multatuli"

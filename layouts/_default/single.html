@@ -1,113 +1,165 @@
 {{ define "main" }}
-<article class="max-w-6xl mx-auto">
-  <!-- Info Header & Metadata -->
-  <div class="mb-10 border-b border-neutral-800 pb-8">
-    <div class="flex items-center gap-3 text-xs font-mono text-neutral-400 mb-2">
+<article class="max-w-5xl lg:max-w-6xl mx-auto pb-16 md:pb-24">
+  {{ $hasCover := .Resources.GetMatch "cover.*" }}
+  <!-- Info Header & Metadata: Jarak Proporsional & Tipografi Bersih -->
+  <header class="pt-2 sm:pt-4 md:pt-6 {{ if $hasCover }}mb-12 sm:mb-16 md:mb-20{{ else }}mb-6 sm:mb-8 md:mb-10{{ end }}">
+    {{ if or .Params.year .Params.location .Params.client }}
+    <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono text-neutral-400 mb-5 sm:mb-6 tracking-wider uppercase">
       {{ with .Params.year }}<span>{{ . }}</span>{{ end }}
-      {{ with .Params.location }}<span>·</span><span>{{ . }}</span>{{ end }}
-      {{ with .Params.client }}<span>·</span><span class="text-neutral-300">{{ . }}</span>{{ end }}
-    </div>
-    <h1 class="text-3xl md:text-5xl font-serif text-white mb-6">{{ .Title }}</h1>
-
-    <!-- Foto Cover Tetap Ukuran Penuh -->
-    {{ with .Resources.GetMatch "cover.*" }}
-    <div class="w-full bg-[#111] border border-neutral-800 overflow-hidden mb-8">
-      <img src="{{ .RelPermalink }}" alt="Cover" class="w-full h-auto max-h-[85vh] object-contain mx-auto">
+      {{ with .Params.location }}<span class="text-neutral-600">·</span><span>{{ . }}</span>{{ end }}
+      {{ with .Params.client }}<span class="text-neutral-600">·</span><span class="text-neutral-300">{{ . }}</span>{{ end }}
     </div>
     {{ end }}
-    
-    <!-- Narasi Teks / Pengantar Cerita -->
-    <div class="text-sm md:text-base text-neutral-300 font-light leading-relaxed space-y-4 max-w-3xl">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.12] max-w-4xl">{{ .Title }}</h1>
+  </header>
+
+  <!-- Foto Cover: Terbingkai Indah dengan Jarak Bernapas yang Luas -->
+  {{ with $hasCover }}
+  <section class="mb-14 sm:mb-18 md:mb-24">
+    <div class="w-full bg-[#0a0a0a] border border-neutral-800/80 overflow-hidden shadow-2xl">
+      <img src="{{ .RelPermalink }}" alt="Cover: {{ $.Title }}" class="w-full h-auto max-h-[85vh] object-contain mx-auto">
+    </div>
+  </section>
+  {{ end }}
+  
+  <!-- Narasi Teks / Pengantar Cerita: Tipografi Elegan & Proporsional -->
+  {{ if .Content }}
+  <section class="{{ if $hasCover }}mb-16 sm:mb-20 md:mb-28{{ else }}mb-12 sm:mb-14 md:mb-16{{ end }}">
+    <div class="prose-content text-base sm:text-lg text-neutral-300 font-light leading-relaxed space-y-6 max-w-3xl">
       {{ .Content }}
     </div>
-  </div>
+  </section>
+  {{ end }}
 
-  <!-- Ringkasan Seri & Tombol Fullscreen Gallery -->
+  <!-- Contact Sheet Gallery Section -->
   {{ if .Params.photos }}
-  <div class="flex items-center justify-between border-b border-neutral-800/80 pb-4 mb-8">
-    <div class="flex items-center gap-3">
-      <span class="text-xs font-mono text-neutral-400 uppercase tracking-widest">{{ len .Params.photos }} Photographs</span>
-      <span class="text-neutral-700">·</span>
-      <span class="text-[11px] font-mono text-neutral-500 uppercase">Contact Sheet Overview</span>
+  <section class="mt-8 mb-16 sm:mb-24">
+    <!-- Divider & Subheader Galeri -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-neutral-800/90 pt-6 pb-6 mb-10 md:mb-12">
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-mono text-neutral-300 uppercase tracking-widest font-medium">{{ len .Params.photos }} Photographs</span>
+        <span class="text-neutral-700">·</span>
+        <span class="text-[11px] font-mono text-neutral-500 uppercase tracking-wider">Contact Sheet Overview</span>
+      </div>
+      <button onclick="openLightbox(0)" class="self-start sm:self-auto text-xs font-mono uppercase tracking-wider text-neutral-300 hover:text-white border border-neutral-700 bg-neutral-900/90 hover:bg-neutral-800 px-4 py-2 flex items-center gap-2 hover:border-neutral-400 transition-all">
+        <span>&#9638;</span> Start Slideshow
+      </button>
     </div>
-    <button onclick="openLightbox(0)" class="text-xs font-mono uppercase tracking-wider text-neutral-300 hover:text-white border border-neutral-700 bg-neutral-900 px-3.5 py-1.5 flex items-center gap-2 hover:border-neutral-500 transition-colors">
-      <span>&#9638;</span> Start Slideshow
-    </button>
-  </div>
 
-  <!-- Grid Thumbnail Keseluruhan Gambar (Contact Sheet Grid) -->
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 mb-20" id="gallery-container">
-    {{ range .Params.photos }}
-      <figure class="group relative aspect-[3/2] bg-[#111] border border-neutral-800 hover:border-neutral-400 overflow-hidden cursor-pointer photo-item transition-all duration-300" 
-              data-src="{{ .src }}" 
-              data-caption="{{ .caption | default "" }}">
-        <img src="{{ .src }}" alt="Frame" class="w-full h-full object-cover group-hover:scale-105 opacity-80 group-hover:opacity-100 transition-all duration-300" loading="lazy">
-        
-        <!-- Overlay Frame Number -->
-        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-white bg-black/80 px-2 py-1 border border-neutral-700">Expand</span>
-        </div>
-      </figure>
-    {{ end }}
-  </div>
+    <!-- Grid Thumbnail Keseluruhan Gambar (Tersusun Rapi Berdasarkan Orientasi Potret & Lanskap) -->
+    <div class="flex flex-wrap gap-2.5 sm:gap-3 md:gap-3.5 items-center" id="gallery-container">
+      {{ range $index, $photo := .Params.photos }}
+        {{ $img := $.Resources.GetMatch .src }}
+        {{ $isPortrait := false }}
+        {{ with $img }}
+          {{ if gt .Height .Width }}
+            {{ $isPortrait = true }}
+          {{ end }}
+        {{ end }}
+
+        <figure class="group relative bg-[#0e0e0e] border border-neutral-800/90 hover:border-neutral-400 overflow-hidden cursor-pointer photo-item transition-all duration-300 h-28 sm:h-32 md:h-36 {{ if $isPortrait }}aspect-[2/3]{{ else }}aspect-[3/2]{{ end }}" 
+                data-src="{{ .src }}" 
+                data-caption="{{ .caption | default "" }}">
+          <img src="{{ .src }}" alt="Frame {{ add $index 1 }}" class="w-full h-full object-cover group-hover:scale-105 opacity-90 group-hover:opacity-100 transition-all duration-300" loading="lazy">
+          
+          <!-- Frame Number Pill -->
+          <span class="absolute bottom-1.5 left-1.5 text-[9px] font-mono tracking-wider text-neutral-400 bg-black/85 backdrop-blur-sm px-1.5 py-0.5 border border-neutral-800 pointer-events-none group-hover:text-white group-hover:border-neutral-600 transition-colors">
+            #{{ printf "%02d" (add $index 1) }}
+          </span>
+
+          <!-- Overlay Frame Action -->
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+            <span class="text-[9px] font-mono uppercase tracking-widest text-white bg-black/80 px-2 py-0.5 border border-neutral-700">Expand</span>
+          </div>
+        </figure>
+      {{ end }}
+    </div>
+  </section>
   {{ end }}
 </article>
 
-<!-- LIGHTBOX MODAL (Preview Fullscreen + Pop-up Caption + Filmstrip) -->
+{{ if .Params.photos }}
+<!-- LIGHTBOX MODAL (Preview Fullscreen + Natural Caption + Filmstrip) -->
 <div id="lightbox-modal" class="fixed inset-0 z-50 bg-[#050505] hidden flex-col justify-between select-none">
   <!-- Top Bar -->
-  <div class="px-6 py-4 flex items-center justify-between border-b border-neutral-800 bg-[#080808]/90">
-    <div class="flex items-center gap-3">
-      <span class="text-xs uppercase tracking-widest font-serif text-white">{{ .Title }}</span>
+  <div class="px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between border-b border-neutral-800 bg-[#080808]/95 flex-shrink-0 z-30">
+    <div class="flex items-center gap-3 min-w-0">
+      <span class="text-xs uppercase tracking-[0.18em] font-medium text-white truncate max-w-[180px] sm:max-w-md">{{ .Title }}</span>
       <span class="text-neutral-600">/</span>
-      <span id="lb-counter" class="text-xs font-mono text-neutral-400">01 / 01</span>
+      <span id="lb-counter" class="text-xs font-mono text-neutral-400 flex-shrink-0">01 / 01</span>
     </div>
 
-    <div class="flex items-center gap-4 text-xs font-mono text-neutral-300">
-      <button id="btn-caption-toggle" onclick="toggleCaptionPopup()" class="px-2.5 py-1 border border-neutral-700 hover:border-white text-neutral-300 hover:text-white transition-colors" title="Toggle Caption (I)">
-        [ i ] Info
+    <div class="flex items-center gap-2 sm:gap-4 text-xs font-mono text-neutral-300">
+      <button id="btn-caption-toggle" onclick="toggleCaptionPopup()" class="px-2.5 py-1 border border-neutral-700 text-neutral-400 hover:text-white transition-colors" title="Toggle Caption (I)">
+        Caption
       </button>
-      <button onclick="toggleFilmstrip()" class="px-2.5 py-1 border border-neutral-700 hover:border-white text-neutral-300 hover:text-white transition-colors" title="Toggle Preview Bar">
+      <button id="btn-fullscreen-toggle" onclick="toggleFullscreen()" class="hidden sm:inline-block px-2.5 py-1 border border-neutral-700 hover:border-white text-neutral-300 hover:text-white transition-colors" title="Toggle Fullscreen (F)">
+        Fullscreen
+      </button>
+      <button id="btn-filmstrip-toggle" onclick="toggleFilmstrip()" class="px-2.5 py-1 border border-white text-white transition-colors" title="Toggle Preview Bar">
         Preview
       </button>
-      <button onclick="closeLightbox()" class="text-neutral-400 hover:text-white text-lg ml-2" title="Close (Esc)">
+      <button onclick="closeLightbox()" class="text-neutral-400 hover:text-white text-xl ml-2 px-1 focus:outline-none" title="Close (Esc)">
         &times;
       </button>
     </div>
   </div>
 
   <!-- Area Tengah Foto -->
-  <div class="relative flex-1 flex items-center justify-center p-4 md:p-8 overflow-hidden">
-    <button onclick="prevPhoto()" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 text-neutral-400 hover:text-white p-3 bg-black/40 hover:bg-black/80 transition-all rounded-full">
+  <div class="relative flex-1 flex items-center justify-center p-2 md:px-12 md:py-3 overflow-hidden min-h-0" id="lb-image-stage">
+    <!-- Tombol Prev -->
+    <button onclick="prevPhoto()" class="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 text-neutral-400 hover:text-white p-3 bg-black/50 hover:bg-black/90 transition-all rounded-full focus:outline-none" aria-label="Previous photograph">
       &#10094;
     </button>
 
-    <div class="relative max-h-full max-w-full flex items-center justify-center">
-      <img id="lb-image" src="" alt="Fullscreen Frame" class="max-h-[74vh] max-w-full object-contain transition-opacity duration-200">
-      
-      <!-- Pop-up Caption Box (Toggle via [ i ]) -->
-      <div id="lb-caption-box" class="hidden absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-black/95 backdrop-blur-md border border-neutral-700 p-5 shadow-2xl z-30 transition-all">
-        <div class="flex items-center justify-between pb-2 mb-2 border-b border-neutral-800">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400">Caption</span>
-          <button onclick="toggleCaptionPopup()" class="text-neutral-400 hover:text-white text-xs">&times;</button>
-        </div>
-        <p id="lb-caption-text" class="text-xs md:text-sm text-neutral-200 font-light leading-relaxed whitespace-pre-line"></p>
+    <!-- Wrapper Foto + Caption: w-full Menjamin Lebar Foto Tidak Terdistorsi -->
+    <div class="relative flex flex-col items-center justify-center w-full max-w-full my-auto" id="lb-content-wrapper">
+      <!-- Foto Utama: flex-shrink-0 Menjamin Foto Tidak Mengecil Sama Sekali -->
+      <div class="relative flex items-center justify-center flex-shrink-0 w-full" id="lb-photo-box">
+        <img id="lb-image" src="" alt="Fullscreen Frame" class="max-h-[72vh] md:max-h-[78vh] max-w-full object-contain transition-opacity duration-200 mx-auto select-none block">
+      </div>
+
+      <!-- Caption Alami: Lebar Presisi Mengikuti Foto & Scroll Down untuk Teks Panjang -->
+      <div id="lb-caption-area" class="hidden mt-2.5 px-0.5 text-left max-h-[13vh] md:max-h-[16vh] overflow-y-auto overscroll-contain custom-caption-scroll transition-opacity duration-200">
+        <p id="lb-caption-text" class="text-xs md:text-sm text-neutral-300 font-light leading-relaxed select-text pr-2"></p>
       </div>
     </div>
 
-    <button onclick="nextPhoto()" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 text-neutral-400 hover:text-white p-3 bg-black/40 hover:bg-black/80 transition-all rounded-full">
+    <!-- Tombol Next -->
+    <button onclick="nextPhoto()" class="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 text-neutral-400 hover:text-white p-3 bg-black/50 hover:bg-black/90 transition-all rounded-full focus:outline-none" aria-label="Next photograph">
       &#10095;
     </button>
   </div>
 
   <!-- Bottom Bar: Filmstrip Strip -->
-  <div id="lb-filmstrip" class="border-t border-neutral-800 bg-[#090909] py-3 px-6 overflow-x-auto flex items-center justify-center gap-2"></div>
+  <div id="lb-filmstrip" class="border-t border-neutral-800 bg-[#090909] py-2 sm:py-2.5 px-4 sm:px-6 overflow-x-auto flex items-center justify-center gap-2 flex-shrink-0"></div>
 </div>
+
+<style>
+  .custom-caption-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) rgba(255, 255, 255, 0.05);
+  }
+  .custom-caption-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-caption-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 9999px;
+  }
+  .custom-caption-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 9999px;
+  }
+  .custom-caption-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
+  }
+</style>
 
 <script>
   let galleryData = [];
   let currentIndex = 0;
-  let isCaptionOpen = false;
+  let isCaptionVisible = false; // Tampilan awal cukup foto saja
 
   function loadGalleryData() {
     const items = document.querySelectorAll('#gallery-container .photo-item');
@@ -126,6 +178,13 @@
     if (galleryData.length === 0) return;
 
     currentIndex = index;
+    isCaptionVisible = false; // Selalu mulai dengan tampilan awal bersih (cukup foto saja)
+
+    const btn = document.getElementById('btn-caption-toggle');
+    if (btn) {
+      btn.className = 'px-2.5 py-1 border border-neutral-700 text-neutral-400 hover:text-white transition-colors';
+    }
+
     const modal = document.getElementById('lightbox-modal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
@@ -133,12 +192,26 @@
 
     const strip = document.getElementById('lb-filmstrip');
     strip.innerHTML = galleryData.map((item, idx) => `
-      <div onclick="goToPhoto(${idx})" class="cursor-pointer flex-shrink-0 w-16 h-11 border ${idx === index ? 'border-white' : 'border-neutral-800 opacity-40'} hover:opacity-100 transition-all overflow-hidden bg-neutral-900">
-        <img src="${item.src}" alt="Thumb" class="w-full h-full object-cover">
+      <div onclick="goToPhoto(${idx})" class="cursor-pointer flex-shrink-0 h-10 sm:h-11 border ${idx === index ? 'border-2 border-white opacity-100' : 'border border-neutral-800 opacity-40'} hover:opacity-100 transition-all overflow-hidden bg-neutral-900 flex items-center justify-center">
+        <img src="${item.src}" alt="Thumb" class="h-full w-auto max-w-[4rem] object-contain">
       </div>
     `).join('');
 
     renderLightbox();
+  }
+
+  // Sinkronisasi lebar area caption agar persis sama dengan lebar foto yang sedang tampil
+  function syncCaptionWidth() {
+    const img = document.getElementById('lb-image');
+    const captionArea = document.getElementById('lb-caption-area');
+    if (!img || !captionArea) return;
+
+    const w = img.getBoundingClientRect().width;
+    if (w > 0) {
+      const pixelWidth = Math.round(w) + 'px';
+      captionArea.style.width = pixelWidth;
+      captionArea.style.maxWidth = pixelWidth;
+    }
   }
 
   function renderLightbox() {
@@ -146,25 +219,63 @@
     if (!photo) return;
 
     const img = document.getElementById('lb-image');
+    const captionEl = document.getElementById('lb-caption-text');
+    const captionArea = document.getElementById('lb-caption-area');
+    const captionText = photo.caption ? photo.caption.trim() : "";
+
     img.style.opacity = '0';
+    if (captionArea) {
+      captionArea.style.opacity = '0';
+      captionArea.style.width = 'auto';
+      captionArea.style.maxWidth = '100%';
+    }
+
+    const onImageReady = () => {
+      img.style.opacity = '1';
+      syncCaptionWidth();
+      if (captionArea && isCaptionVisible && captionText.length > 0) {
+        captionArea.style.opacity = '1';
+      }
+    };
+
+    img.onload = onImageReady;
+
     setTimeout(() => {
       img.src = photo.src;
-      img.style.opacity = '1';
-    }, 80);
+      if (img.complete) {
+        onImageReady();
+      }
+    }, 60);
 
     const total = String(galleryData.length).padStart(2, '0');
     const current = String(currentIndex + 1).padStart(2, '0');
     document.getElementById('lb-counter').innerText = current + " / " + total;
     
-    document.getElementById('lb-caption-text').innerText = photo.caption ? photo.caption : "Tidak ada keterangan.";
+    // Caption alami tepat di bawah foto (hanya tampil jika diminta pengunjung)
+    if (captionText.length > 0) {
+      captionEl.innerText = captionText;
+      if (isCaptionVisible) {
+        captionArea.classList.remove('hidden');
+        captionArea.style.display = 'block';
+        captionArea.scrollTop = 0;
+        syncCaptionWidth();
+      } else {
+        captionArea.classList.add('hidden');
+        captionArea.style.display = 'none';
+      }
+    } else {
+      captionEl.innerText = "";
+      captionArea.classList.add('hidden');
+      captionArea.style.display = 'none';
+    }
 
     const thumbs = document.querySelectorAll('#lb-filmstrip > div');
     thumbs.forEach((thumb, i) => {
       if (i === currentIndex) {
-        thumb.className = 'cursor-pointer flex-shrink-0 w-16 h-11 border-2 border-white opacity-100 transition-all overflow-hidden bg-neutral-900';
+        thumb.className = 'cursor-pointer flex-shrink-0 h-10 sm:h-11 border-2 border-white opacity-100 transition-all overflow-hidden bg-neutral-900 flex items-center justify-center';
         thumb.scrollIntoView({ behavior: 'smooth', inline: 'center' });
       } else {
-        thumb.className = 'cursor-pointer flex-shrink-0 w-16 h-11 border border-neutral-800 opacity-40 hover:opacity-100 transition-all overflow-hidden bg-neutral-900';
+        thumb.className = 'cursor-pointer flex-shrink-0 h-10 sm:h-11 border border-neutral-800 opacity-40 hover:opacity-100 transition-all overflow-hidden bg-neutral-900 flex items-center justify-center';
       }
     });
   }
@@ -185,24 +296,52 @@
   }
 
   function toggleCaptionPopup() {
-    const box = document.getElementById('lb-caption-box');
+    isCaptionVisible = !isCaptionVisible;
+    const area = document.getElementById('lb-caption-area');
     const btn = document.getElementById('btn-caption-toggle');
-    isCaptionOpen = !isCaptionOpen;
+    const currentPhoto = galleryData[currentIndex];
+    const hasCaption = currentPhoto && currentPhoto.caption && currentPhoto.caption.trim().length > 0;
 
-    if (isCaptionOpen) {
-      box.classList.remove('hidden');
-      btn.classList.add('bg-white', 'text-black');
-      btn.classList.remove('text-neutral-300');
-    } else {
-      box.classList.add('hidden');
-      btn.classList.remove('bg-white', 'text-black');
-      btn.classList.add('text-neutral-300');
+    if (area) {
+      if (isCaptionVisible && hasCaption) {
+        syncCaptionWidth();
+        area.classList.remove('hidden');
+        area.style.display = 'block';
+        area.scrollTop = 0;
+        area.style.opacity = '1';
+      } else {
+        area.classList.add('hidden');
+        area.style.display = 'none';
+      }
+    }
+    if (btn) {
+      if (isCaptionVisible) {
+        btn.className = 'px-2.5 py-1 border border-white text-white transition-colors';
+      } else {
+        btn.className = 'px-2.5 py-1 border border-neutral-700 text-neutral-400 hover:text-white transition-colors';
+      }
     }
   }
 
   function toggleFilmstrip() {
     const strip = document.getElementById('lb-filmstrip');
+    const btn = document.getElementById('btn-filmstrip-toggle');
     strip.classList.toggle('hidden');
+    if (btn) {
+      if (!strip.classList.contains('hidden')) {
+        btn.className = 'px-2.5 py-1 border border-white text-white transition-colors';
+      } else {
+        btn.className = 'px-2.5 py-1 border border-neutral-700 text-neutral-400 hover:text-white transition-colors';
+      }
+    }
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+    }
   }
 
   function closeLightbox() {
@@ -210,10 +349,19 @@
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     document.body.style.overflow = '';
-    isCaptionOpen = false;
-    document.getElementById('lb-caption-box').classList.add('hidden');
+    isCaptionVisible = false;
+    const area = document.getElementById('lb-caption-area');
+    if (area) {
+      area.classList.add('hidden');
+      area.style.display = 'none';
+    }
+    const btn = document.getElementById('btn-caption-toggle');
+    if (btn) {
+      btn.className = 'px-2.5 py-1 border border-neutral-700 text-neutral-400 hover:text-white transition-colors';
+    }
   }
 
+  // Keyboard navigation
   document.addEventListener('keydown', (e) => {
     const modal = document.getElementById('lightbox-modal');
     if (!modal.classList.contains('hidden')) {
@@ -221,9 +369,27 @@
       if (e.key === 'ArrowLeft') prevPhoto();
       if (e.key === 'Escape') closeLightbox();
       if (e.key.toLowerCase() === 'i') toggleCaptionPopup();
+      if (e.key.toLowerCase() === 'f') toggleFullscreen();
     }
   });
 
+  // Mobile touch swipe gestures
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const stage = document.getElementById('lightbox-modal');
+  if (stage) {
+    stage.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    stage.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 45) nextPhoto();
+      if (touchEndX > touchStartX + 45) prevPhoto();
+    }, { passive: true });
+  }
+
   window.addEventListener('DOMContentLoaded', loadGalleryData);
+  window.addEventListener('resize', syncCaptionWidth);
 </script>
+{{ end }}
 {{ end }}

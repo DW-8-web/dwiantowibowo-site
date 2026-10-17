@@ -6,4 +6,4 @@ Available for editorial commissions, documentary assignments, and collaborative 
 
 - **Email:** [contact@dwiantowibowo.com](mailto:contact@dwiantowibowo.com)
 - **Base:** Jakarta, Indonesia
-- **Instagram:** [@dwiantow](https://instagram.com)
+- **Instagram:** [@dwiantow](https://instagram.com/dwiantow)
