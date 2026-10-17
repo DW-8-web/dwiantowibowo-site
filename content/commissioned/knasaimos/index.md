@@ -4,7 +4,7 @@ date: 2023-08-01
 year: "2023"
 location: "South Sorong, Southwest Papua"
 client: "Project Multatuli"
-summary: "the Knasaimos indigenous community stands as a steadfast frontline against the persistent threat of deforestation and corporate palm oil expansion. This photo story documents their victorious struggle to defend their ancestral lands by successfully securing the rights to their village forest.."
+summary: "The Knasaimos indigenous community stands as a steadfast frontline against the persistent threat of deforestation and corporate palm oil expansion. This photo story documents their victorious struggle to defend their ancestral lands by successfully securing the rights to their village forest.."
 
 photos:
   - src: "knasaimos-01.webp"
