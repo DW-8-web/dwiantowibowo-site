@@ -1,0 +1,32 @@
+---
+title: "Transforming Cities: Cooling Jakarta"
+date: 2022-10-06
+year: "2022"
+location: "Jakarta & Tangerang, Indonesia"
+client: "C40 Cities by BBC StoryWorks"
+cover: "cwf-02.webp"
+summary: "As global temperatures rise, Indonesia's instant fix of air conditioning is worsening urban heat. This project documents a breakthrough, sustainable alternative: \"BeCool\" UV-reflective roof paint, developed by architecture professor and lecturer, Beta Paramita. Captured in a dense Tangerang settlement, the visual narrative highlights how BeCool paint could significantly cool a home's interior from 31°C to 27°C, providing a tangible solution to a warming world."
+photos:
+  - src: "cwf-01.webp"
+    caption: "A pair of high-rise buildings under construction highlights Zeki’s concerns over the future surge in air conditioning and cooling energy demand. Jakarta, October 2022."
+  - src: "cwf-02.webp"
+    caption: "Zeki points to the steep increase in air conditioning usage, transforming from a luxury into an everyday necessity across all segments of society as global temperatures continue to rise."
+  - src: "cwf-03.webp"
+    caption: "A resident’s roof being coated with BeCool reflective paint as an innovative passive cooling solution."
+  - src: "cwf-04.webp"
+    caption: "A university student working on Beta Paramita’s cooling project measures indoor temperature distribution using a thermal imaging camera."
+  - src: "cwf-05.webp"
+    caption: "Workers apply BeCool solar reflective paint to a residential rooftop, providing an accessible passive cooling solution for dense urban settlements."
+  - src: "cwf-06.webp"
+    caption: "Muhammad Zeki, Senior Program Associate at ClimateWorks Foundation, photographed in the Sudirman central business district, Jakarta."
+  - src: "cwf-07.webp"
+    caption: "Beta Paramita, inventor of the BeCool reflective paint formula, photographed following a rooftop painting project in Tangerang."
+  - src: "cwf-08.webp"
+    caption: "Surface temperature measurements on the newly coated rooftop demonstrate a substantial drop in heat."
+  - src: "cwf-09.webp"
+    caption: "Beta Paramita displays real-time temperature readings demonstrating the cooling efficacy of the reflective roof coating."
+  - src: "cwf-10.webp"
+    caption: "Beta Paramita gathers feedback from a local resident following the application of BeCool coating on their home’s roof."
+---
+
+"As global temperatures rise, Indonesia's instant fix of air conditioning is worsening urban heat. This project documents a breakthrough, sustainable alternative: "BeCool" UV-reflective roof paint, developed by architecture professor and lecturer, Beta Paramita. Captured in a dense Tangerang settlement, the visual narrative highlights how BeCool paint could significantly cool a home's interior from 31°C to 27°C, providing a tangible solution to a warming world. This film was produced for the Clean Cooling Collaborative and ClimateWorks Foundation by BBC StoryWorks Commercial Productions as part of C40 Cities’ Transforming Cities series."
