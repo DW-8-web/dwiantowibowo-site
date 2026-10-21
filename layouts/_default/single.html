@@ -17,7 +17,13 @@
   {{ with $hasCover }}
   <section class="mb-14 sm:mb-18 md:mb-24">
     <div class="w-full bg-[#0a0a0a] border border-neutral-800/80 overflow-hidden shadow-2xl">
-      <img src="{{ .RelPermalink }}" alt="Cover: {{ $.Title }}" class="w-full h-auto max-h-[85vh] object-contain mx-auto">
+      {{ $coverResized := "" }}
+      {{ if gt .Width 1600 }}
+        {{ $coverResized = .Resize "1600x webp q85" }}
+      {{ else }}
+        {{ $coverResized = . }}
+      {{ end }}
+      <img src="{{ $coverResized.RelPermalink }}" alt="Cover: {{ $.Title }}" class="w-full h-auto max-h-[85vh] object-contain mx-auto" decoding="async">
     </div>
   </section>
   {{ end }}
@@ -57,10 +63,25 @@
           {{ end }}
         {{ end }}
 
+        {{ $thumb := "" }}
+        {{ with $img }}
+          {{ if gt .Width 480 }}
+            {{ $thumb = .Resize "480x webp q80" }}
+          {{ else }}
+            {{ $thumb = . }}
+          {{ end }}
+        {{ end }}
+
         <figure class="group relative bg-[#0e0e0e] border border-neutral-800/90 hover:border-neutral-400 overflow-hidden cursor-pointer photo-item transition-all duration-300 h-16 sm:h-22 md:h-28 lg:h-32 {{ if $isPortrait }}aspect-[2/3]{{ else }}aspect-[3/2]{{ end }}" 
-                data-src="{{ .src }}" 
+                data-full="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ .src }}{{ end }}"
+                data-thumb="{{ with $thumb }}{{ .RelPermalink }}{{ else }}{{ .src }}{{ end }}"
+                data-src="{{ with $img }}{{ .RelPermalink }}{{ else }}{{ .src }}{{ end }}" 
                 data-caption="{{ .caption | default "" }}">
-          <img src="{{ .src }}" alt="Frame {{ add $index 1 }}" class="w-full h-full object-cover group-hover:scale-105 opacity-90 group-hover:opacity-100 transition-all duration-300" loading="lazy">
+          <img src="{{ with $thumb }}{{ .RelPermalink }}{{ else }}{{ .src }}{{ end }}" 
+               alt="Frame {{ add $index 1 }}" 
+               class="w-full h-full object-cover group-hover:scale-105 opacity-90 group-hover:opacity-100 transition-transform duration-300 transform-gpu will-change-transform" 
+               loading="lazy"
+               decoding="async">
           
           <!-- Frame Number Pill -->
           <span class="absolute bottom-1 left-1 sm:bottom-1.5 sm:left-1.5 text-[8px] sm:text-[9px] font-mono tracking-wider text-neutral-400 bg-black/85 backdrop-blur-sm px-1 py-0 sm:px-1.5 sm:py-0.5 border border-neutral-800 pointer-events-none group-hover:text-white group-hover:border-neutral-600 transition-colors">
@@ -165,9 +186,9 @@
     const items = document.querySelectorAll('#gallery-container .photo-item');
     galleryData = Array.from(items).map((item, idx) => {
       item.onclick = () => openLightbox(idx);
-      const img = item.querySelector('img');
       return {
-        src: img ? img.src : item.getAttribute('data-src'),
+        src: item.getAttribute('data-full') || item.getAttribute('data-src'),
+        thumb: item.getAttribute('data-thumb') || item.querySelector('img')?.src || item.getAttribute('data-src'),
         caption: item.getAttribute('data-caption') || ""
       };
     });
@@ -193,7 +214,7 @@
     const strip = document.getElementById('lb-filmstrip');
     strip.innerHTML = galleryData.map((item, idx) => `
       <div onclick="goToPhoto(${idx})" class="cursor-pointer flex-shrink-0 h-10 sm:h-11 border ${idx === index ? 'border-2 border-white opacity-100' : 'border border-neutral-800 opacity-40'} hover:opacity-100 transition-all overflow-hidden bg-neutral-900 flex items-center justify-center">
-        <img src="${item.src}" alt="Thumb" class="h-full w-auto max-w-[4rem] object-contain">
+        <img src="${item.thumb}" alt="Thumb" class="h-full w-auto max-w-[4rem] object-contain" loading="lazy" decoding="async">
       </div>
     `).join('');
 

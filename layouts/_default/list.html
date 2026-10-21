@@ -28,7 +28,13 @@
           {{ end }}
         {{ end }}
         {{ with $cover }}
-          <img src="{{ .RelPermalink }}" alt="{{ $page.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          {{ $cardThumb := "" }}
+          {{ if gt .Width 720 }}
+            {{ $cardThumb = .Resize "720x webp q82" }}
+          {{ else }}
+            {{ $cardThumb = . }}
+          {{ end }}
+          <img src="{{ $cardThumb.RelPermalink }}" alt="{{ $page.Title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 transform-gpu will-change-transform" loading="lazy" decoding="async">
         {{ else }}
           <div class="w-full h-full flex items-center justify-center text-xs text-neutral-600 font-mono">NO COVER IMAGE</div>
         {{ end }}
