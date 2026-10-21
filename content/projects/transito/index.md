@@ -4,6 +4,7 @@ date: 2026-10-01
 featured: true
 year: "2011 - present"
 location: "Lombok, West Nusa Tenggara"
+cover: "transito-03.webp"
 summary: "Forced from their homes by violent religious persecution, the Ahmadiyya community in Lombok, West Nusa Tenggara, has been confined to a temporary state shelter known as Asrama Transito for over a decade."
 photos:
     - src: "transito-01.webp"
