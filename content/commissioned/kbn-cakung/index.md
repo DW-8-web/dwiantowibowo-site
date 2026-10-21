@@ -1,9 +1,10 @@
 ---
-title: "KBN Cakung; The Twilight of the Bonded Zone in Jakarta"
+title: "KBN Cakung: The Twilight of the Bonded Zone in Jakarta"
 date: 2023-09-01
 year: "2023"
 location: "Jakarta"
 client: "Project Multatuli"
+cover: "foto-02.webp"
 summary: "The increase in the Jakarta Provincial Minimum Wage was used as an excuse by companies to lay off thousands of workers, moving their factories to areas with much cheaper labor in West and Central Java."
 photos:
   - src: "foto-01.webp"
