@@ -4,12 +4,13 @@
   {{ $hasMedia := or .Params.youtube_id $hasCover }}
   <!-- Info Header & Metadata: Jarak Proporsional & Tipografi Bersih -->
   <header class="pt-2 sm:pt-4 md:pt-6 {{ if $hasMedia }}mb-12 sm:mb-16 md:mb-20{{ else }}mb-6 sm:mb-8 md:mb-10{{ end }}">
-    {{ if or .Params.year .Params.location .Params.client .Params.director .Params.youtube_id }}
+    {{ if or .Params.year .Params.location .Params.client .Params.director .Params.role .Params.youtube_id }}
     <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono text-neutral-400 mb-5 sm:mb-6 tracking-wider uppercase">
       {{ with .Params.year }}<span>{{ . }}</span>{{ end }}
       {{ with .Params.location }}<span class="text-neutral-600">·</span><span>{{ . }}</span>{{ end }}
       {{ with .Params.client }}<span class="text-neutral-600">·</span><span class="text-neutral-300">{{ . }}</span>{{ end }}
       {{ with .Params.director }}<span class="text-neutral-600">·</span><span>Director: <span class="text-neutral-300">{{ . }}</span></span>{{ end }}
+      {{ with .Params.role }}<span class="text-neutral-600">·</span><span>Role: <span class="text-neutral-300">{{ . }}</span></span>{{ end }}
       {{ if .Params.youtube_id }}<span class="text-neutral-600">·</span><span class="text-neutral-300">Video</span>{{ end }}
     </div>
     {{ end }}
