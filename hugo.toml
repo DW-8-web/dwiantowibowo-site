@@ -2,6 +2,9 @@ baseURL = 'https://dwiantowibowo.com/'
 languageCode = 'en-us'
 title = 'Dwianto Wibowo · Independent Visual Storyteller'
 
+[services.googleAnalytics]
+  ID = 'G-MTDZYD838D'
+
 # Menentukan menu navigasi utama
 [menu]
   [[menu.main]]

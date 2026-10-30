@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ if not .IsHome }}{{ .Title }} — {{ end }}{{ site.Title }}</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTDZYD838D"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-MTDZYD838D');
+  </script>
   
   {{ $description := .Params.summary | default .Description | default "Independent Visual Storyteller focusing on long-form documentary photography, human rights, and social realities across the Indonesian archipelago." }}
   <meta name="description" content="{{ $description }}">
