@@ -1,36 +1,54 @@
 {{ define "main" }}
 <article class="max-w-5xl lg:max-w-6xl mx-auto pb-16 md:pb-24">
   {{ $hasCover := .Resources.GetMatch "cover.*" }}
+  {{ $hasMedia := or .Params.youtube_id $hasCover }}
   <!-- Info Header & Metadata: Jarak Proporsional & Tipografi Bersih -->
-  <header class="pt-2 sm:pt-4 md:pt-6 {{ if $hasCover }}mb-12 sm:mb-16 md:mb-20{{ else }}mb-6 sm:mb-8 md:mb-10{{ end }}">
-    {{ if or .Params.year .Params.location .Params.client }}
+  <header class="pt-2 sm:pt-4 md:pt-6 {{ if $hasMedia }}mb-12 sm:mb-16 md:mb-20{{ else }}mb-6 sm:mb-8 md:mb-10{{ end }}">
+    {{ if or .Params.year .Params.location .Params.client .Params.director .Params.youtube_id }}
     <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono text-neutral-400 mb-5 sm:mb-6 tracking-wider uppercase">
       {{ with .Params.year }}<span>{{ . }}</span>{{ end }}
       {{ with .Params.location }}<span class="text-neutral-600">·</span><span>{{ . }}</span>{{ end }}
       {{ with .Params.client }}<span class="text-neutral-600">·</span><span class="text-neutral-300">{{ . }}</span>{{ end }}
+      {{ with .Params.director }}<span class="text-neutral-600">·</span><span>Director: <span class="text-neutral-300">{{ . }}</span></span>{{ end }}
+      {{ if .Params.youtube_id }}<span class="text-neutral-600">·</span><span class="text-neutral-300">Video</span>{{ end }}
     </div>
     {{ end }}
     <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-[1.12] max-w-4xl">{{ .Title }}</h1>
   </header>
 
-  <!-- Foto Cover: Terbingkai Indah dengan Jarak Bernapas yang Luas -->
-  {{ with $hasCover }}
+  <!-- Media Utama: Pemutar Video YouTube (jika postingan video) atau Foto Cover -->
+  {{ if .Params.youtube_id }}
   <section class="mb-14 sm:mb-18 md:mb-24">
-    <div class="w-full bg-[#0a0a0a] border border-neutral-800/80 overflow-hidden shadow-2xl">
-      {{ $coverResized := "" }}
-      {{ if gt .Width 1600 }}
-        {{ $coverResized = .Resize "1600x webp q85" }}
-      {{ else }}
-        {{ $coverResized = . }}
-      {{ end }}
-      <img src="{{ $coverResized.RelPermalink }}" alt="Cover: {{ $.Title }}" class="w-full h-auto max-h-[85vh] object-contain mx-auto" decoding="async">
+    <div class="w-full aspect-video bg-[#0a0a0a] border border-neutral-800/80 overflow-hidden shadow-2xl relative">
+      <iframe 
+        class="w-full h-full absolute inset-0"
+        src="https://www.youtube-nocookie.com/embed/{{ .Params.youtube_id }}?rel=0&modestbranding=1" 
+        title="{{ $.Title }}" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen>
+      </iframe>
     </div>
   </section>
+  {{ else }}
+    {{ with $hasCover }}
+    <section class="mb-14 sm:mb-18 md:mb-24">
+      <div class="w-full bg-[#0a0a0a] border border-neutral-800/80 overflow-hidden shadow-2xl">
+        {{ $coverResized := "" }}
+        {{ if gt .Width 1600 }}
+          {{ $coverResized = .Resize "1600x webp q85" }}
+        {{ else }}
+          {{ $coverResized = . }}
+        {{ end }}
+        <img src="{{ $coverResized.RelPermalink }}" alt="Cover: {{ $.Title }}" class="w-full h-auto max-h-[85vh] object-contain mx-auto" decoding="async">
+      </div>
+    </section>
+    {{ end }}
   {{ end }}
   
   <!-- Narasi Teks / Pengantar Cerita: Tipografi Elegan & Proporsional -->
   {{ if .Content }}
-  <section class="{{ if $hasCover }}mb-16 sm:mb-20 md:mb-28{{ else }}mb-12 sm:mb-14 md:mb-16{{ end }}">
+  <section class="{{ if $hasMedia }}mb-16 sm:mb-20 md:mb-28{{ else }}mb-12 sm:mb-14 md:mb-16{{ end }}">
     <div class="prose-content text-base sm:text-lg text-neutral-300 font-light leading-relaxed space-y-6 max-w-3xl">
       {{ .Content }}
     </div>

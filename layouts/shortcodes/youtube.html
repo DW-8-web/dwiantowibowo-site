@@ -1,0 +1,12 @@
+{{ $id := or (.Get "id") (.Get 0) }}
+{{ $title := or (.Get "title") "YouTube Video" }}
+<div class="my-8 w-full aspect-video bg-[#0a0a0a] border border-neutral-800/80 overflow-hidden shadow-2xl relative">
+  <iframe 
+    class="w-full h-full absolute inset-0"
+    src="https://www.youtube-nocookie.com/embed/{{ $id }}?rel=0&modestbranding=1" 
+    title="{{ $title }}" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen>
+  </iframe>
+</div>

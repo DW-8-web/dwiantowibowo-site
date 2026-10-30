@@ -46,6 +46,11 @@
             {{ . }}
           </span>
         {{ end }}
+        {{ if .Params.youtube_id }}
+          <span class="absolute top-2.5 right-2.5 text-[9px] font-mono tracking-widest uppercase bg-black/85 backdrop-blur-sm text-neutral-300 px-2 py-0.5 border border-neutral-800 flex items-center gap-1.5">
+            <span class="text-neutral-400">▶</span> VIDEO
+          </span>
+        {{ end }}
       </div>
 
       <div class="space-y-1">
@@ -53,6 +58,7 @@
           {{ with .Params.client }}<span>{{ . }}</span>{{ end }}
           {{ if and .Params.client .Params.location }}<span>·</span>{{ end }}
           {{ with .Params.location }}<span>{{ . }}</span>{{ end }}
+          {{ if .Params.youtube_id }}<span>·</span><span class="text-neutral-400">Video</span>{{ end }}
         </div>
         <h2 class="text-base md:text-lg font-medium text-white group-hover:underline leading-snug tracking-tight">{{ .Title }}</h2>
         {{ with .Params.summary }}
