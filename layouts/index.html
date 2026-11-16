@@ -53,8 +53,20 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {{ range where site.RegularPages.ByDate.Reverse "Section" "in" (slice "projects" "commissioned") }}
-    {{ $page := . }}
+    {{ $all := where site.RegularPages.ByDate.Reverse "Section" "in" (slice "projects" "commissioned") }}
+    {{ $target := where $all "RelPermalink" "/commissioned/menjawet-rotan-mahaga-hutan/" }}
+    {{ $others := where $all "RelPermalink" "!=" "/commissioned/menjawet-rotan-mahaga-hutan/" }}
+    {{ $ordered := slice }}
+    {{ range first 4 $others }}
+      {{ $ordered = $ordered | append . }}
+    {{ end }}
+    {{ range $target }}
+      {{ $ordered = $ordered | append . }}
+    {{ end }}
+    {{ range after 4 $others }}
+      {{ $ordered = $ordered | append . }}
+    {{ end }}
+    {{ range $page := $ordered }}
     <article class="group">
       <a href="{{ $page.RelPermalink }}" class="block">
         <div class="aspect-[3/2] bg-neutral-900 border border-neutral-800 overflow-hidden mb-3 relative">
